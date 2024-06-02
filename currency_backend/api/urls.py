@@ -6,5 +6,5 @@ router = DefaultRouter()
 router.register(r'currency-rates', CurrencyRateViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]
