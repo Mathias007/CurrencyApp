@@ -1,0 +1,55 @@
+version: '3.5'
+
+services:
+  database:
+    image: postgres:14.1
+    container_name: currency_database
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      
+  backend:
+    build: ./currency_backend
+    container_name: currency_backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/:/usr/src/backend/
+    ports:
+      - 8000:8000
+    environment:
+      - PG_USER=postgres
+      - PG_PASSWORD=postgres
+      - PG_DB=postgres
+      - PG_PORT=5432
+      - PG_HOST=database
+    depends_on:
+      - database
+
+  frontend:
+    build: ./currency_frontend
+    container_name: currency_frontend
+    # env_file:
+    #   - ./.env
+    volumes:
+      - ./frontend:/frontend/
+    ports:
+      - "4200:4200"
+
+  gateway:
+    build: ./currency_gateway
+    container_name: currency_gateway
+    # env_file:
+    #   - ./.env
+    ports:
+      - 8080:80
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  db_data:
