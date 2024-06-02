@@ -1,1 +1,8 @@
-<p>currency-rates works!</p>
+<div *ngIf="rates">
+    <h2>Currency Rates</h2>
+    <ul>
+      <li *ngFor="let rate of rates">
+        {{ rate.date }}: {{ rate.value }}
+      </li>
+    </ul>
+</div>
