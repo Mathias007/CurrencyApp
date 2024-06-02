@@ -1,7 +1,7 @@
 import requests
 from .models import CurrencyRate
 
-def fetch_currency_rates():
+def fetch_currency_rates_nbp():
     url = 'http://api.nbp.pl/api/exchangerates/tables/A?format=json'
     response = requests.get(url)
     data = response.json()
