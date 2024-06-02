@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CurrencyService {
-  private apiUrl = 'http://localhost:8000/api/currency-rates/';
+  private apiUrl = 'http://localhost:8000/currency-rates/';
 
   constructor(private http: HttpClient) { }
 
