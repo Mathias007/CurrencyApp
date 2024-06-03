@@ -1,21 +1,7 @@
-// import { Component, OnInit } from '@angular/core';
-
-// export class CurrencyRatesComponent implements OnInit {
-//   rates: any;
-
-//   constructor(private currencyService: CurrencyService) { }
-
-//   ngOnInit(): void {
-//     this.currencyService.getRates().subscribe((data: any) => {
-//       this.rates = data;
-//     });
-//   }
-// }
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-
-// import { CurrencyService } from '../currency.service';
+import { CurrencyService } from '../currency.service';
 
 @Component({
   selector: 'app-currency-rates',
@@ -28,10 +14,10 @@ export class CurrencyRatesComponent {
   currencyRates: any;
   months = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'];
 
-  constructor(private http: HttpClient) {}
+  constructor(private currencyService: CurrencyService) {}
 
   downloadCurrencyRates() {
-    this.http.post('http://localhost:8000/download-currency-rates/', {}).subscribe(
+    this.currencyService.downloadCurrencyRates().subscribe(
       (response) => {
         console.log('Fetching currency rates in progress...', response);
       },
@@ -42,8 +28,14 @@ export class CurrencyRatesComponent {
   }
 
   fetchCurrencyRatesByPeriod(period: string) {
-    this.http.get(`http://localhost:8000/fetch-currency-rates-period/${period}/`).subscribe(data => {
+    this.currencyService.getRatesByPeriod(period).subscribe(data => {
       this.currencyRates = this.transformRates(data, period);
+    });
+  }
+
+  fetchAllCurrencyRates() {
+    this.currencyService.getAllRates().subscribe(data => {
+      this.currencyRates = this.transformRates(data, 'general');
     });
   }
 

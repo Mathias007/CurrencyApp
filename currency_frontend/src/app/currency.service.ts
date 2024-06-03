@@ -6,11 +6,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CurrencyService {
-  private apiUrl = 'http://localhost:8000/fetch-currency-rates-general/';
+  private baseUrl = 'http://localhost:8000';
 
   constructor(private http: HttpClient) { }
 
-  getRates(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  downloadCurrencyRates(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/download-currency-rates/`, {});
+  }
+
+  getRatesByPeriod(period: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/fetch-currency-rates-period/${period}/`);
+  }
+
+  getAllRates(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/fetch-currency-rates-general/`);
   }
 }
