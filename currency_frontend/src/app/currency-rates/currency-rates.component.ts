@@ -24,23 +24,33 @@
 
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-currency-rates',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './currency-rates.component.html',
   styleUrls: ['./currency-rates.component.scss']
 })
 export class CurrencyComponent {
+  currencyRates: any;
+
   constructor(private http: HttpClient) {}
 
   fetchCurrencyRates() {
     this.http.post('http://localhost:8000/download-currency-rates/', {}).subscribe(
       (response) => {
-        console.log(response);
+        console.log('Fetching currency rates in progress...', response);
       },
       (error) => {
         console.error(error);
       }
     );
+  }
+  getRates(period: string) {
+    this.http.get(`http://localhost:8000/currency-rates/${period}/`).subscribe(data => {
+      this.currencyRates = data;
+    });
   }
 }
