@@ -1,25 +1,33 @@
-<div>
-  <button (click)="fetchCurrencyRates()">Pobierz kursy walut</button>
+<div class="container">
+  <div class="button-group">
+    <button class="btn" (click)="downloadCurrencyRates()">Pobierz kursy walut</button>
+  </div>
+  <div>
+    <h3>Wyświetl kursy walut</h3>
+    <div class="button-group">
+      <button class="btn" (click)="fetchCurrencyRatesByPeriod('year')">Roczne</button>
+      <button class="btn" (click)="fetchCurrencyRatesByPeriod('quarter')">Kwartalne</button>
+      <button class="btn" (click)="fetchCurrencyRatesByPeriod('month')">Miesięczne</button>
+      <button class="btn" (click)="fetchCurrencyRatesByPeriod('day')">Dziennie</button>
+    </div>
+  </div>
 
-  <button (click)="getRates('year')">Get Yearly Rates</button>
-  <button (click)="getRates('month')">Get Monthly Rates</button>
-  <button (click)="getRates('day')">Get Daily Rates</button>
-</div>
-<div *ngIf="currencyRates">
-  <table>
-    <thead>
-      <tr>
-        <th>Period</th>
-        <th>Currerncy</th>
-        <th>Average Rate</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let rate of currencyRates">
-        <td>{{ rate.period }}</td>
-        <td>{{ rate.code }}</td>
-        <td>{{ rate.avg_value }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div *ngIf="currencyRates" class="table-container">
+    <table class="currency-table">
+      <thead>
+        <tr>
+          <th>Okres</th>
+          <th>Waluta</th>
+          <th>Średni Kurs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rate of currencyRates">
+          <td>{{ rate.transformedPeriod }}</td>
+          <td>{{ rate.code }}</td>
+          <td>{{ rate.avg_value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
