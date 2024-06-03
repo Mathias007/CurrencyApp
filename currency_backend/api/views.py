@@ -1,17 +1,9 @@
-# from rest_framework import viewsets
-# from .models import CurrencyRate
-# from .serializers import CurrencyRateSerializer
-
-# class CurrencyRateViewSet(viewsets.ModelViewSet):
-#     queryset = CurrencyRate.objects.all()
-#     serializer_class = CurrencyRateSerializer
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .tasks import fetch_currency_rates_nbp
 from .models import CurrencyRate
 from .serializers import CurrencyRateSerializer
-from django.db.models.functions import TruncYear, TruncMonth, TruncDay
+from django.db.models.functions import TruncYear, TruncQuarter, TruncMonth, TruncDay
 from django.db.models import Avg
 
 @api_view(['POST'])
@@ -29,6 +21,8 @@ def fetch_rates(request):
 def get_currency_rates_by_period(request, period):
     if period == 'year':
         rates = CurrencyRate.objects.annotate(period=TruncYear('date')).values('period', 'code').annotate(avg_value=Avg('value')).order_by('period', 'code')
+    elif period == 'quarter':
+        rates = CurrencyRate.objects.annotate(period=TruncQuarter('date')).values('period', 'code').annotate(avg_value=Avg('value')).order_by('period', 'code')
     elif period == 'month':
         rates = CurrencyRate.objects.annotate(period=TruncMonth('date')).values('period', 'code').annotate(avg_value=Avg('value')).order_by('period', 'code')
     elif period == 'day':
